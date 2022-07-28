@@ -13,5 +13,23 @@ class misc(commands.Cog):
         )
         respondEmbed.set_author(name="Ramie", icon_url=self.bot.user.avatar.url)
         await ctx.respond(embed=respondEmbed)
+
+    @commands.slash_command(description="Invite Ramie to your own server")
+    async def invite(self,ctx:discord.ApplicationContext):
+        respondEmbed=discord.Embed(
+            description="Add me to your server:\nhttps://www.echomediaworks.com/ramie"
+        )
+        respondEmbed.set_author(name="Ramie", icon_url=self.bot.user.avatar.url)
+        await ctx.respond(embed=respondEmbed)
+
+    @commands.slash_command(description="Ramie Github Repo")
+    async def repo(self, ctx:discord.ApplicationContext):
+        respondEmbed=discord.Embed(
+            description="Wanna contribute? Check out My Github Repo: https://github.com/EMWFabianSales/Ramiel"
+        )
+        respondEmbed.set_author(name="Ramie", icon_url=self.bot.user.avatar.url)
+
+        await ctx.respond(embed=respondEmbed)
+
 def setup(bot:discord.Bot):
     bot.add_cog(misc(bot))

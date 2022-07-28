@@ -3,3 +3,6 @@
 !memegifs.json
 
 __pycache__
+
+data/reactionRoles/*json
+data/adminRoles/*json
