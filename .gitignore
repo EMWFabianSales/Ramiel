@@ -1,3 +1,5 @@
 .env
-.json
+*.json
 !memegifs.json
+
+__pycache__
