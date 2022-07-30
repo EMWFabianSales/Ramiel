@@ -30,6 +30,9 @@ class reacts(commands.Cog):
                     ],
                     "slap":[
 
+                    ],
+                    "feed":[
+
                     ]
                 }
                 json.dump(newgiffil, memegif, indent=4)
@@ -123,6 +126,27 @@ class reacts(commands.Cog):
         respondEmbed.set_image(url=gifs.get('hug')[random.randrange(0,len(gifs.get('hug')))])
     
         await ctx.send_response(embed=respondEmbed)
-
+    
+    @react.command(description="Headpat your friends, spread the love!!")
+    async def headpat(self, ctx:discord.ApplicationContext, target:discord.Member):
+        with open("data/memegifs.json","r") as memegif:
+            gifs = json.load(memegif)
+        
+        if  target == ctx.author:
+            respondEmbed = discord.Embed(
+                description=f"{ctx.author.mention} gave **themselves** a headpat, a self pat? idk..."
+            )
+        elif target != self.bot.user:
+            respondEmbed = discord.Embed(
+                description=f"{ctx.author.mention} gave {target.mention} a headpat"
+            )
+        else:
+            respondEmbed = discord.Embed(
+                description=f"**COUNTER**\n{ctx.author.mention} gave {target.mention} a headpat, sorry but i don't like getting my hair messy :3 "
+            )
+        respondEmbed.set_author(name="Ramie", icon_url=self.bot.user.avatar.url)
+        respondEmbed.set_image(url=gifs.get('headpat')[random.randrange(0,len(gifs.get('headpat')))])
+    
+        await ctx.send_response(embed=respondEmbed)
 def setup(bot:discord.Bot):
     bot.add_cog(reacts(bot))

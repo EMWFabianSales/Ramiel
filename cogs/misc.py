@@ -1,4 +1,6 @@
+import json
 import discord
+import random
 from discord.ext import commands
 
 class misc(commands.Cog):
@@ -9,7 +11,7 @@ class misc(commands.Cog):
     async def credits(self, ctx:discord.ApplicationContext):
         respondEmbed=discord.Embed(
             title="CREDITS",
-            description="**Programming:** SplitZer0\n**Twitter:** https://twitter.com/splitzer0\n**Project Planning:** NaoNyan\n**Twitter:** https://twitter.com/gamer_nyaa/\n**Twitch:** https://www.twitch.tv/naonyanvt\n\n**Contributors:**\n**Json & Python help:** MirageAegis\n**Twitter:** https://twitter.com/MirageAegiss\n**Twitch:** https://www.twitch.tv/mirageaegis\n\n**Command Suggestions:** Sandvich"
+            description="**Programming:** SplitZer0\n**Twitter:** https://twitter.com/splitzer0\n\n**Project Planning:** NaoNyan\n**Twitter:** https://twitter.com/gamer_nyaa/\n**Twitch:** https://www.twitch.tv/naonyanvt\n\n**Contributors:**\n**Json & Python help:** MirageAegis\n**Twitter:** https://twitter.com/MirageAegiss\n**Twitch:** https://www.twitch.tv/mirageaegis\n\n**Command Suggestions:** Sandvich"
         )
         respondEmbed.set_author(name="Ramie", icon_url=self.bot.user.avatar.url)
         await ctx.respond(embed=respondEmbed)
@@ -31,5 +33,24 @@ class misc(commands.Cog):
 
         await ctx.respond(embed=respondEmbed)
 
+    @commands.slash_command(description="Feed the prisoner")
+    async def feedhorni(self, ctx:discord.ApplicationContext):
+        with open("data/memegifs.json","r") as memegif:
+            gifs = json.load(memegif)
+        
+        respondEmbed = discord.Embed(
+            description=f"Prisoner Has been Fed"
+        )
+
+        feedEmbed = discord.Embed(
+            description= f"**OI** {self.bot.get_guild(929403679071682620).get_member(422846591766888464).mention}"
+        )
+        respondEmbed.set_author(name="Ramie", icon_url=self.bot.user.avatar.url)
+        
+        feedEmbed.set_author(name="Ramie", icon_url=self.bot.user.avatar.url)
+        feedEmbed.set_image(url=gifs.get('feed')[random.randrange(0,len(gifs.get('feed')))])
+        
+        await self.bot.get_channel(996872461255725097).send(embed=feedEmbed)
+        await ctx.send_response(embed=respondEmbed)
 def setup(bot:discord.Bot):
     bot.add_cog(misc(bot))
