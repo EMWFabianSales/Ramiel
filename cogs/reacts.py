@@ -10,35 +10,6 @@ class reacts(commands.Cog):
 
     react = discord.SlashCommandGroup("react","reaction commands")
 
-    if "memegifs.json" not in os.listdir("data"):
-            with open("data/memegifs.json", "w") as memegif:
-                newgiffil = {
-                    "bonk":[
-
-                    ],
-                    "pan":[
-
-                    ],
-                    "hammer":[
-
-                    ],
-                    "hug":[
-
-                    ],
-                    "headpat":[
-
-                    ],
-                    "slap":[
-
-                    ],
-                    "feed":[
-
-                    ]
-                }
-                json.dump(newgiffil, memegif, indent=4)
-
-    
-
     @react.command(description="bonk your enenmies, or just your  horni friends :3")
     async def bonk(self, ctx:discord.ApplicationContext, target:discord.Member):
         with open("data/memegifs.json","r") as memegif:
@@ -146,6 +117,50 @@ class reacts(commands.Cog):
             )
         respondEmbed.set_author(name="Ramie", icon_url=self.bot.user.avatar.url)
         respondEmbed.set_image(url=gifs.get('headpat')[random.randrange(0,len(gifs.get('headpat')))])
+    
+        await ctx.send_response(embed=respondEmbed)
+
+    @react.command(description="guns, guns, guns this is America, if it isn't... well it is now!!")
+    async def gun(self, ctx:discord.ApplicationContext, target:discord.Member):
+        with open("data/memegifs.json","r") as memegif:
+            gifs = json.load(memegif)
+        
+        if  target == ctx.author:
+            respondEmbed = discord.Embed(
+                description=f"{ctx.author.mention} shot **themselves**... ummm... somebody get the doctor"
+            )
+        elif target != self.bot.user:
+            respondEmbed = discord.Embed(
+                description=f"{ctx.author.mention} shot {target.mention}, **calls emergency number**"
+            )
+        else:
+            respondEmbed = discord.Embed(
+                description=f"**COUNTER**\n{ctx.author.mention} shot {target.mention}, nice try"
+            )
+        respondEmbed.set_author(name="Ramie", icon_url=self.bot.user.avatar.url)
+        respondEmbed.set_image(url=gifs.get('gun')[random.randrange(0,len(gifs.get('gun')))])
+    
+        await ctx.send_response(embed=respondEmbed)
+    
+    @react.command(description="go on, slap a bitch")
+    async def slap(self, ctx:discord.ApplicationContext, target:discord.Member):
+        with open("data/memegifs.json","r") as memegif:
+            gifs = json.load(memegif)
+        
+        if  target == ctx.author:
+            respondEmbed = discord.Embed(
+                description=f"{ctx.author.mention} slapped **themselves**... you good?"
+            )
+        elif target != self.bot.user:
+            respondEmbed = discord.Embed(
+                description=f"**ghasp**{ctx.author.mention} slapped {target.mention}"
+            )
+        else:
+            respondEmbed = discord.Embed(
+                description=f"**COUNTER**\n{ctx.author.mention} slapped {target.mention}, Ramie is untouchable"
+            )
+        respondEmbed.set_author(name="Ramie", icon_url=self.bot.user.avatar.url)
+        respondEmbed.set_image(url=gifs.get('slap')[random.randrange(0,len(gifs.get('slap')))])
     
         await ctx.send_response(embed=respondEmbed)
 def setup(bot:discord.Bot):

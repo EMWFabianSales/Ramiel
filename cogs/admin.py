@@ -1,24 +1,15 @@
-from email import message
 import os
 import json
+import datetime
+import humanfriendly
 import discord
 from discord.ext import commands
-admingroupdatapath = "data/adminRoles"
+import discord.utils
 reactionRolesPath = "data/reactionRoles"
 
 def checkIfAdmin(ctx:discord.ApplicationContext):
-    if f"{str(ctx.guild_id)}.json" not in os.listdir(admingroupdatapath):
-        with open(f"{admingroupdatapath}/{ctx.guild_id}.json", "w") as adminGroupFile:
-            blackdict = dict()
-
-            blackdict["0"] = []
-            
-            json.dump(blackdict, adminGroupFile)
-    
-    with open(f"{admingroupdatapath}/{ctx.guild_id}.json", "r") as adminGroupFile:
-        adminGroupData = json.load(adminGroupFile)
-
-
+    with open(f"data/serverData/{ctx.guild_id}.json", "r") as serverFile:
+        serverData = json.load(serverFile)
 
     if ctx.user.id == ctx.guild.owner_id:
         return True
@@ -27,20 +18,11 @@ def checkIfAdmin(ctx:discord.ApplicationContext):
             return True
         else:
             for role in ctx.user.roles:
-                if role.id in adminGroupData:
+                if role.id in serverFile["adminRoles"]:
                     return True
                     break
                 else:
                     return False
-
-def checkIfRoleInAdminFile(ctx:discord.ApplicationContext, role:discord.Role):
-    with open(f"{admingroupdatapath}/{ctx.guild_id}.json", "r") as adminGroupFile:
-        adminGroupData = json.load(adminGroupFile)
-
-    if role.id in adminGroupData["0"]:
-        return True
-    else:
-        return False
 
 class admin(commands.Cog):
     def __init__(self, bot:discord.Bot):
@@ -53,42 +35,67 @@ class admin(commands.Cog):
     #listeners
     @commands.Cog.listener()
     async def on_raw_reaction_remove(self,ctx):
-        with open(f"{reactionRolesPath}/{ctx.guild_id}.json","r") as reactionPath:
-            reactionData = json.load(reactionPath)
+        with open(f"data/serverData/{ctx.guild_id}.json","r") as serverFile:
+            serverData = json.load(serverFile)
 
         if(str(ctx.emoji.id) != 'None'):
-            if str(ctx.message_id) in reactionData:
-                if f"<:{ctx.emoji.name}:{ctx.emoji.id}>" in reactionData[str(ctx.message_id)].keys():
-                    await self.bot.get_guild(ctx.guild_id).get_member(ctx.user_id).remove_roles(self.bot.get_guild(ctx.guild_id).get_role(int(reactionData[str(ctx.message_id)][f"<:{ctx.emoji.name}:{ctx.emoji.id}>"])))
-                elif f"<a:{ctx.emoji.name}:{ctx.emoji.id}>" in reactionData[str(ctx.message_id)].keys():
-                    await self.bot.get_guild(ctx.guild_id).get_member(ctx.user_id).remove_roles(self.bot.get_guild(ctx.guild_id).get_role(int(reactionData[str(ctx.message_id)][f"<a:{ctx.emoji.name}:{ctx.emoji.id}>"])))
+            if str(ctx.message_id) in serverData["reactionRoles"]:
+                if f"<:{ctx.emoji.name}:{ctx.emoji.id}>" in serverData["reactionRoles"][str(ctx.message_id)]:
+                    await self.bot.get_guild(ctx.guild_id).get_member(ctx.user_id).remove_roles(self.bot.get_guild(ctx.guild_id).get_role(int(serverData["reactionRoles"][str(ctx.message_id)][f"<:{ctx.emoji.name}:{ctx.emoji.id}>"])))
+                elif f"<a:{ctx.emoji.name}:{ctx.emoji.id}>" in serverData["reactionRoles"][str(ctx.message_id)]:
+                    await self.bot.get_guild(ctx.guild_id).get_member(ctx.user_id).remove_roles(self.bot.get_guild(ctx.guild_id).get_role(int(serverData["reactionRoles"][str(ctx.message_id)][f"<a:{ctx.emoji.name}:{ctx.emoji.id}>"])))
         #is Default Emoji
         else:
             #check if message has rection roles
-            if str(ctx.message_id) in reactionData:
-                if ctx.emoji.name in reactionData[str(ctx.message_id)].keys():
-                    await self.bot.get_guild(ctx.guild_id).get_member(ctx.user_id).remove_roles(self.bot.get_guild(ctx.guild_id).get_role(int(reactionData[str(ctx.message_id)][ctx.emoji.name])))
+            if str(ctx.message_id) in serverData["reactionRoles"]:
+                if ctx.emoji.name in serverData["reactionRoles"][str(ctx.message_id)].keys():
+                    await self.bot.get_guild(ctx.guild_id).get_member(ctx.user_id).remove_roles(self.bot.get_guild(ctx.guild_id).get_role(int(serverData["reactionRoles"][str(ctx.message_id)][ctx.emoji.name])))
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, ctx:discord.ApplicationContext):
-        with open(f"{reactionRolesPath}/{ctx.guild_id}.json", "r") as reactionPath:
-            reactiondata = json.load(reactionPath)
+        with open(f"data/serverdata/{ctx.guild_id}.json", "r") as serverFile:
+            serverData = json.load(serverFile)
         
         #is Custom Emoji
         if(str(ctx.emoji.id) != 'None'):
-            if str(ctx.message_id) in reactiondata:
-                if f"<:{ctx.emoji.name}:{ctx.emoji.id}>" in reactiondata[str(ctx.message_id)].keys():
-                    await ctx.member.add_roles(self.bot.get_guild(ctx.guild_id).get_role(int(reactiondata[str(ctx.message_id)][f"<:{ctx.emoji.name}:{ctx.emoji.id}>"])))
-                elif f"<a:{ctx.emoji.name}:{ctx.emoji.id}>" in reactiondata[str(ctx.message_id)].keys():
-                    await ctx.member.add_roles(self.bot.get_guild(ctx.guild_id).get_role(int(reactiondata[str(ctx.message_id)][f"<a:{ctx.emoji.name}:{ctx.emoji.id}>"])))
+            if str(ctx.message_id) in serverData["reactionRoles"]:
+                if f"<:{ctx.emoji.name}:{ctx.emoji.id}>" in serverData["reactionRoles"][str(ctx.message_id)]:
+                    await ctx.member.add_roles(self.bot.get_guild(ctx.guild_id).get_role(int(serverData["reactionRoles"][str(ctx.message_id)][f"<:{ctx.emoji.name}:{ctx.emoji.id}>"])))
+                elif f"<a:{ctx.emoji.name}:{ctx.emoji.id}>" in serverData["reactionRoles"][str(ctx.message_id)]:
+                    await ctx.member.add_roles(self.bot.get_guild(ctx.guild_id).get_role(int(serverData["reactionRoles"][str(ctx.message_id)][f"<a:{ctx.emoji.name}:{ctx.emoji.id}>"])))
         #is Default Emoji
         else:
             #check if message has rection roles
-            if str(ctx.message_id) in reactiondata:
-                if ctx.emoji.name in reactiondata[str(ctx.message_id)].keys():
-                    await ctx.member.add_roles(self.bot.get_guild(ctx.guild_id).get_role(int(reactiondata[str(ctx.message_id)][ctx.emoji.name])))
+            if str(ctx.message_id) in serverData["reactionRoles"]:
+                if ctx.emoji.name in serverData["reactionRoles"][str(ctx.message_id)]:
+                    await ctx.member.add_roles(self.bot.get_guild(ctx.guild_id).get_role(int(serverData["reactionRoles"][str(ctx.message_id)][ctx.emoji.name])))
         
     #commands
+    @admin.command(description="Put User in Time Out")
+    async def timeout(self, ctx:discord.ApplicationContext, user:discord.Member, duration:discord.Option(description="timeout duration"), reason:discord.Option(str, description="reason for time out", required=False)):
+        if checkIfAdmin(ctx):
+            time = humanfriendly.parse_timespan(duration)
+            m = await ctx.respond(f"placing {user} in time out")
+
+            await user.timeout(until= discord.utils.utcnow() + datetime.timedelta(seconds=time), reason=reason)
+
+            await m.edit_original_message(f"{user} has been placed in timeout for \"{reason}\"")
+
+    @admin.command(description="Ban User")
+    async def ban(self, ctx:discord.ApplicationContext, user:discord.Member, reason:discord.Option(str, description="reason for ban", required=False)):
+        if checkIfAdmin(ctx):
+
+            m = await ctx.respond(f"banning {user}")
+            await user.ban(reason=reason)
+            await m.edit_original_message(f"{user} has been banned for \"{reason}\"")
+
+    @admin.command(description="Kick User")
+    async def kick(self, ctx:discord.ApplicationContext, user:discord.Member, reason:discord.Option(str, description="reason for kick", required=False)):
+        if checkIfAdmin(ctx):
+
+            m = await ctx.respond(f"banning {user}")
+            await user.kick(reason=reason)
+            await m.edit_original_message(f"{user} has been kicked for \"{reason}\"")
 
     @admin.command(description="announce message in channel")
     async def announce(self,ctx:discord.ApplicationContext, channelid, announcement:str):
@@ -103,103 +110,100 @@ class admin(commands.Cog):
 
 
     @admin.command(description="Purge channel of all messages")
-    async def purge(self,ctx:discord.ApplicationContext):
-        
-        with open(f"{reactionRolesPath}/{str(ctx.guild.id)}.json", "r") as reactionPath:
-            reactionRolesData = json.load(reactionPath)
-
-        isadmin = False
-        
-        if (ctx.author.id != self.bot.get_guild(ctx.guild.id).owner_id):
-            if ctx.author.guild_permissions.administrator:
-                isadmin = True
-            elif str(ctx.guild.id) in reactionRolesData:
-                for r in ctx.author.roles:
-                    if str(r.id) in reactionRolesData[str(ctx.guild.id)]:
-                        isadmin = True
-        else:
-            isadmin = True
-
-        if isadmin == True:
-            await ctx.channel.purge()
-            await ctx.send_response("channel purged", delete_after=5)
+    async def purge(self,ctx:discord.ApplicationContext, purgetype:discord.Option(str, description="'c' for Channel Purge, 'i' for integer delete"), deletesize:discord.Option(int, required=False)):
+        if checkIfAdmin(ctx):
+            if(purgetype == 'c'):
+                await ctx.channel.purge()
+                await ctx.send_response("channel purged", delete_after=2)
+            if(purgetype == 'i'):
+                await ctx.channel.purge(limit=deletesize)
+                await ctx.send_response(f"{deletesize} messages purged", delete_after=2)
         else:
             await ctx.respond("You do not have the correct permissions to access this command")
-        
-    
+
     @adminroles.command(description="add role to admin roles")
     async def add(self, ctx:discord.ApplicationContext, role:discord.Role):
         respondEmbed = discord.Embed(
-            description=f"adding **{role}** to Admin Group"
+            description=f"adding {role.mention} to Admin Group"
         )
         respondEmbed.set_author(name="Ramie",icon_url=self.bot.user.avatar.url)
-
-
+        
         m = await ctx.respond(embed=respondEmbed)
 
+        #Admin Check
         if checkIfAdmin(ctx):
-            with open(f"{admingroupdatapath}/{ctx.guild_id}.json", "r") as adminRoleFile:
-                adminGroupData:dict = json.load(adminRoleFile)
-            
-            if checkIfRoleInAdminFile(ctx, role):
-                respondEmbed = discord.Embed(
-                    description=f"**{role}** already exists in Admin Group"
-                )
-                respondEmbed.set_author(name="Ramie",icon_url=self.bot.user.avatar.url)
+            with open(f"data/serverData/{ctx.guild_id}.json", "r") as serverFile:
+                serverData:dict = json.load(serverFile)
 
-                await m.edit_original_message(embed=respondEmbed)
+            if role.id in serverData["adminRoles"]:
+                respondEmbed.description = f"{role.mention} already in Admin Group"
             else:
-                respondEmbed = discord.Embed(
-                description=f"**{role}** added to Admin Group"
-                )
-                respondEmbed.set_author(name="Ramie",icon_url=self.bot.user.avatar.url)
-                adminGroupData["0"].append(role.id)
-                await m.edit_original_message(embed=respondEmbed)
-                
-            with open(f"{admingroupdatapath}/{ctx.guild_id}.json", "w") as adminRoleFile:
-                json.dump(adminGroupData, adminRoleFile)
-        else:
-            respondEmbed = discord.Embed(
-                    description=f"You do not have the correct permissions to access this command"
-                )
-            respondEmbed.set_author(name="Ramie", icon_url=self.bot.user.avatar.url)
-            await m.edit_original_message(embed=respondEmbed)
+                serverData["adminRoles"].append(role.id)
 
+                respondEmbed.description = f"{role.mention} added to Admin Group"
+    
+            #write data:
+            with open(f"data/serverData/{ctx.guild_id}.json", "w") as serverFile:
+                json.dump(serverData, serverFile, indent=4)
+        else:
+            respondEmbed.description = f"You do not have the correct permissions to use **/adminroles** command"
+        
+        await m.edit_original_message(embed=respondEmbed)
+               
+            
     @adminroles.command(description="remove role from admin roles")
     async def remove(self, ctx:discord.ApplicationContext, role:discord.Role):
         respondEmbed = discord.Embed(
-            description=f"removing {role} from Admin Group"
+            description=f"removing {role.mention} from Admin Group"
         )
+        
         respondEmbed.set_author(name="Ramie", icon_url=self.bot.user.avatar.url)
+        
         m = await ctx.respond(embed=respondEmbed)
 
         if(checkIfAdmin(ctx)):
-            with open(f"{admingroupdatapath}/{ctx.guild_id}.json", "r") as adminRoleFile:
-                adminGroupData:dict = json.load(adminRoleFile)
+            with open(f"data/serverData/{ctx.guild_id}.json", "r") as serverFile:
+                serverData:dict = json.load(serverFile)
 
-            if(checkIfRoleInAdminFile(ctx,role)):
-                del adminGroupData["0"][adminGroupData["0"].index(role.id)]
-                respondEmbed = discord.Embed(
-                    description=f"**{role}** removed from Admin Group"
-                )
-                respondEmbed.set_author(name="Ramie", icon_url=self.bot.user.avatar.url)
-                await m.edit_original_message(embed=respondEmbed)
+            if role.id not in serverData["adminRoles"]:
+                respondEmbed.description = f"{role.mention} not in Admin Group"
             else:
-                respondEmbed = discord.Embed(
-                    description=f"**{role}** does not exist in Admin Group"
-                )
-                respondEmbed.set_author(name="Ramie", icon_url=self.bot.user.avatar.url)
-                await m.edit_original_message(embed=respondEmbed)
-
-            with open(f"{admingroupdatapath}/{ctx.guild_id}.json", "w") as adminRoleFile:
-                    json.dump(adminGroupData, adminRoleFile)
+                del serverData["adminRoles"][serverData["adminRoles"].index(role.id)]
+                respondEmbed.description = f"{role.mention} removed from Admin Group"
+            
+            with open(f"data/serverData/{ctx.guild_id}.json", "w") as serverFile:
+                json.dump(serverData, serverFile, indent=4)
         else:
-            respondEmbed = discord.Embed(
-                    description=f"You do not have the correct permissions to access this command"
-                )
-            respondEmbed.set_author(name="Ramie", icon_url=self.bot.user.avatar.url)
-            await m.edit_original_message(embed=respondEmbed)
-    
+            respondEmbed.description = f"You do not have the correct permissions to use **/adminroles** command"
+
+        await m.edit_original_message(embed=respondEmbed)
+            
+    @adminroles.command(description="List all Admin Roles")
+    async def list(self, ctx:discord.ApplicationContext):
+        with open(f"data/serverData/{ctx.guild_id}.json", "r") as serverFile:
+                serverData:dict = json.load(serverFile)
+
+        respondEmbed = discord.Embed(
+            description=f"Grabbing reaction role list"
+        )
+        respondEmbed.set_author(name="Ramie", icon_url=self.bot.user.avatar.url)
+
+        m = await ctx.respond(embed=respondEmbed)    
+        
+        if checkIfAdmin(ctx):
+            with open(f"data/serverData/{ctx.guild_id}.json", "r") as serverFile:
+                serverData:dict = json.load(serverFile)
+            
+            responseString = f"roles in Admin Group:\n"
+            listItemNumber = 0
+            for role in serverData["adminRoles"]:
+                responseString = responseString + f"**{listItemNumber}.** {ctx.guild.get_role(role).mention}\n"
+                listItemNumber += 1
+            respondEmbed.description = responseString
+        else:
+            respondEmbed.description=f"You do not have the correct permissions to access this command"
+        await m.edit_original_message(embed=respondEmbed)
+
     @reactionroles.command(description="Add reaction role to Message")
     async def add(self,ctx:discord.ApplicationContext, messageid, emoji, roletoadd:discord.Role):
         
@@ -211,48 +215,24 @@ class admin(commands.Cog):
         m = await ctx.respond(embed=respondEmbed)    
 
         if checkIfAdmin(ctx):
-            
+            with open(f"data/serverData/{ctx.guild_id}.json", "r") as serverFile:
+                serverData:dict = json.load(serverFile)
 
-            if f"{ctx.guild_id}.json" not in os.listdir(reactionRolesPath):
-                with open(f"{reactionRolesPath}/{ctx.guild_id}.json", "w") as reactionRolesFile:
-                    json.dump(dict(), reactionRolesFile)
-            
-            with open(f"{reactionRolesPath}/{ctx.guild_id}.json", "r") as reactionRolesFile:
-                reactionRolesData:dict = json.load(reactionRolesFile)
+            if str(messageid) not in serverData["reactionRoles"]:
+                serverData["reactionRoles"][str(messageid)] = {}
 
-            if messageid not in reactionRolesData:
-                reactionRolesData[messageid] = {}
-
-            if emoji not in reactionRolesData[messageid]:
-                respondEmbed = discord.Embed(
-                
-                description=f"Reaction Role {emoji}({roletoadd.mention}) added to {messageid}"
-                ) 
-                reactionRolesData[messageid][emoji] = roletoadd.id
+            if emoji in serverData["reactionRoles"][str(messageid)].keys():
+                respondEmbed.description = f"{emoji} already in message's Reaction Roles"
             else:
-                respondEmbed = discord.Embed(
-                
-                description=f"Reaction Role {emoji}({ctx.guild.get_role(reactionRolesData[messageid].get(emoji)).mention}) Already Exists in {messageid}"
-                ) 
+                serverData["reactionRoles"][str(messageid)][emoji] = roletoadd.id
+                respondEmbed.description = f"{emoji} ({roletoadd.mention}) added to message's Reaction Roles"
 
-            with open(f"{reactionRolesPath}/{ctx.guild_id}.json", "w") as reactionRolesFile:
-                json.dump(reactionRolesData, reactionRolesFile)
-            
-            respondEmbed.set_author(name="Ramie", icon_url=self.bot.user.avatar.url)
-
-            await m.edit_original_message(embed=respondEmbed)
-        else:
-            respondEmbed = discord.Embed(
-                    description=f"You do not have the correct permissions to access this command"
-                )
-            respondEmbed.set_author(name="Ramie", icon_url=self.bot.user.avatar.url)
-            await m.edit_original_message(embed=respondEmbed)
+            with open(f"data/serverData/{ctx.guild_id}.json", "w") as serverFile:
+                json.dump(serverData, serverFile, indent=4)
+        await m.edit_original_message(embed=respondEmbed)
 
     @reactionroles.command(description="Remove reaction role from message")
     async def remove(self,ctx:discord.ApplicationContext, messageid, emoji):
-        with open(f"{reactionRolesPath}/{ctx.guild_id}.json", "r") as reactionRolesFile:
-                reactionRolesData:dict = json.load(reactionRolesFile)
-
         respondEmbed = discord.Embed(
             description=f"Removing reaction roles: {emoji} from {messageid}"
         )
@@ -261,37 +241,21 @@ class admin(commands.Cog):
         m = await ctx.respond(embed=respondEmbed)    
 
         if checkIfAdmin(ctx):
-            
-            if messageid not in reactionRolesData:
-                reactionRolesData[messageid] = {}
-
-            if emoji in reactionRolesData[messageid]:
-                respondEmbed = discord.Embed( 
-                    description=f"Reaction Role {emoji}({ctx.guild.get_role(reactionRolesData[messageid][emoji]).mention}) Removed from {messageid}"
-                ) 
-                del reactionRolesData[messageid][emoji]
+            with open(f"data/serverData/{ctx.guild_id}.json", "r") as serverFile:
+                serverData:dict = json.load(serverFile)
+            if (messageid not in serverData["reactionRoles"].keys()) or (emoji not in serverData["reactionRoles"][str(messageid)]):
+                respondEmbed.description = f"{emoji} not in messages's Reaction Roles"
             else:
-                respondEmbed = discord.Embed(
-                    description=f"Reaction Role {emoji} does not exist in {messageid}"
-                ) 
-
-            with open(f"{reactionRolesPath}/{ctx.guild_id}.json", "w") as reactionRolesFile:
-                json.dump(reactionRolesData, reactionRolesFile)
-            
-            respondEmbed.set_author(name="Ramie", icon_url=self.bot.user.avatar.url)
-
-            await m.edit_original_message(embed=respondEmbed)
-        else:
-            respondEmbed = discord.Embed(
-                    description=f"You do not have the correct permissions to access this command"
-                )
-            respondEmbed.set_author(name="Ramie", icon_url=self.bot.user.avatar.url)
-            await m.edit_original_message(embed=respondEmbed)
+                del serverData["reactionRoles"][str(messageid)][emoji]
+                respondEmbed.description = f"{emoji} removed from message's Reaction Roles"
+            with open(f"data/serverData/{ctx.guild_id}.json", "w") as serverFile:
+                json.dump(serverData, serverFile, indent=4)
+        await m.edit_original_message(embed=respondEmbed)
     
     @reactionroles.command(description="List all reaction roles in a message")
     async def list(self, ctx:discord.ApplicationContext, messageid):
-        with open(f"{reactionRolesPath}/{ctx.guild_id}.json", "r") as reactionRolesFile:
-                reactionRolesData:dict = json.load(reactionRolesFile)
+        with open(f"data/serverData/{ctx.guild_id}.json", "r") as serverFile:
+                serverData:dict = json.load(serverFile)
 
         respondEmbed = discord.Embed(
             description=f"Grabbing reaction role list"
@@ -301,26 +265,19 @@ class admin(commands.Cog):
         m = await ctx.respond(embed=respondEmbed)    
         
         if checkIfAdmin(ctx):
-            with open(f"{reactionRolesPath}/{ctx.guild_id}.json", "r") as reactionRolesFile:
-                reactionRolesData:dict = json.load(reactionRolesFile)
+            with open(f"data/serverData/{ctx.guild_id}.json", "r") as serverFile:
+                serverData:dict = json.load(serverFile)
 
             
             responseString = f"Reaction roles in {messageid}:\n"
             listItemNumber = 0
-            for emoji in reactionRolesData[str(messageid)].keys():
-                responseString = responseString + f"**{listItemNumber}.** {emoji}({ctx.guild.get_role(reactionRolesData[str(messageid)].get(emoji)).mention})\n"
+            for emoji in serverData["reactionRoles"][str(messageid)].keys():
+                responseString = responseString + f"**{listItemNumber}.** {emoji}({ctx.guild.get_role(serverData['reactionRoles'][str(messageid)].get(emoji)).mention})\n"
                 listItemNumber += 1
-            respondEmbed =  discord.Embed(
-                description=responseString
-            )
-            respondEmbed.set_author(name="Ramie", icon_url=self.bot.user.avatar.url)
-            await m.edit_original_message(embed=respondEmbed)
+            respondEmbed.description = responseString
         else:
-            respondEmbed = discord.Embed(
-                    description=f"You do not have the correct permissions to access this command"
-                )
-            respondEmbed.set_author(name="Ramie", icon_url=self.bot.user.avatar.url)
-            await m.edit_original_message(embed=respondEmbed)
+            respondEmbed.description=f"You do not have the correct permissions to access this command"
+        await m.edit_original_message(embed=respondEmbed)
 
 def setup(bot:discord.Bot):
     bot.add_cog(admin(bot))

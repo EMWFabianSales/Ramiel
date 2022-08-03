@@ -52,5 +52,6 @@ class misc(commands.Cog):
         
         await self.bot.get_channel(996872461255725097).send(embed=feedEmbed)
         await ctx.send_response(embed=respondEmbed)
+
 def setup(bot:discord.Bot):
     bot.add_cog(misc(bot))
