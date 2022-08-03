@@ -1,8 +1,11 @@
 .env
 *.json
 !memegifs.json
+testing.py
 
+
+data/dataConverter
 __pycache__
 
-data/reactionRoles/*json
-data/adminRoles/*json
+data/reactionRoles/*.json
+data/adminRoles/*.json

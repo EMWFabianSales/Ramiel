@@ -11,7 +11,7 @@ class misc(commands.Cog):
     async def credits(self, ctx:discord.ApplicationContext):
         respondEmbed=discord.Embed(
             title="CREDITS",
-            description="**Programming:** SplitZer0\n**Twitter:** https://twitter.com/splitzer0\n\n**Project Planning:** NaoNyan\n**Twitter:** https://twitter.com/gamer_nyaa/\n**Twitch:** https://www.twitch.tv/naonyanvt\n\n**Contributors:**\n**Json & Python help:** MirageAegis\n**Twitter:** https://twitter.com/MirageAegiss\n**Twitch:** https://www.twitch.tv/mirageaegis\n\n**Command Suggestions:** Sandvich"
+            description="**Programming:** SplitZer0\n**Twitter:** https://twitter.com/splitzer0\n\n**Project Planning:** NaoNyan\n**Twitter:** https://twitter.com/gamer_nyaa/\n**Twitch:** https://www.twitch.tv/naonyanvt\n\n**Contributors:**\n**Json & Python help:** MirageAegis\n**Twitter:** https://twitter.com/MirageAegiss\n**Twitch:** https://www.twitch.tv/mirageaegis\n\n**Command Suggestions:** Sandvich,\nOne Toasty Boi,\nMirageAegis"
         )
         respondEmbed.set_author(name="Ramie", icon_url=self.bot.user.avatar.url)
         await ctx.respond(embed=respondEmbed)
