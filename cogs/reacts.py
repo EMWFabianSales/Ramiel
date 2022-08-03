@@ -113,7 +113,7 @@ class reacts(commands.Cog):
             )
         else:
             respondEmbed = discord.Embed(
-                description=f"**COUNTER**\n{ctx.author.mention} gave {target.mention} a headpat, sorry but i don't like getting my hair messy :3 "
+                description=f"**COUNTER**\n{target.mention} gave {ctx.author.mention} a headpat, sorry but i don't like getting my hair messy :3 "
             )
         respondEmbed.set_author(name="Ramie", icon_url=self.bot.user.avatar.url)
         respondEmbed.set_image(url=gifs.get('headpat')[random.randrange(0,len(gifs.get('headpat')))])
@@ -135,7 +135,7 @@ class reacts(commands.Cog):
             )
         else:
             respondEmbed = discord.Embed(
-                description=f"**COUNTER**\n{ctx.author.mention} shot {target.mention}, nice try"
+                description=f"**COUNTER**\n{target.mention} shot {ctx.author.mention}, nice try"
             )
         respondEmbed.set_author(name="Ramie", icon_url=self.bot.user.avatar.url)
         respondEmbed.set_image(url=gifs.get('gun')[random.randrange(0,len(gifs.get('gun')))])
@@ -157,7 +157,7 @@ class reacts(commands.Cog):
             )
         else:
             respondEmbed = discord.Embed(
-                description=f"**COUNTER**\n{ctx.author.mention} slapped {target.mention}, Ramie is untouchable"
+                description=f"**COUNTER**\n{target.mention} slapped {ctx.author.mention}, Ramie is untouchable"
             )
         respondEmbed.set_author(name="Ramie", icon_url=self.bot.user.avatar.url)
         respondEmbed.set_image(url=gifs.get('slap')[random.randrange(0,len(gifs.get('slap')))])
