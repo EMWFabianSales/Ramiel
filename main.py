@@ -9,8 +9,7 @@ testToken = os.getenv('testtoken')
 buildToken = os.getenv('buildtoken')
 
 botintents = discord.Intents.all()
-bot = discord.Bot(intents=botintents)
-
+bot = discord.Bot(intents=botintents, auto_sync_commands=True)
 
 @bot.event
 async def on_ready():

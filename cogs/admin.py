@@ -53,7 +53,7 @@ class admin(commands.Cog):
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, ctx:discord.ApplicationContext):
-        with open(f"data/serverdata/{ctx.guild_id}.json", "r") as serverFile:
+        with open(f"data/serverData/{ctx.guild_id}.json", "r") as serverFile:
             serverData = json.load(serverFile)
         
         #is Custom Emoji
