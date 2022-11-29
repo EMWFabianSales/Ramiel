@@ -1,0 +1,63 @@
+{
+    "BOT-DATA-VERSION": "0.0.06",
+    "serverOwner": "Splitzer0",
+    "serverOwnerID": 701329437341384725,
+    "guildName": "Ramie Dev",
+    "guildID": 985278997963374652,
+    "bdaysEnabled": false,
+    "bdayChannelID": null,
+    "bdayWishlistEnabled": false,
+    "reactionRoles": {
+        "MESSAGE ID": {
+            "Max Roles": 0,
+            "rr": {
+                "EMOJI": "ROLE ID"
+            }
+        },
+        "1025121232837951549": {
+            "rr": {
+                "\u2764\ufe0f": 998429599513968770,
+                "\ud83d\ude49": 998429649342316565
+            },
+            "max-roles": 1
+        }
+    },
+    "users": {
+        "USER ID": {
+            "name": "USER NAME",
+            "id": "USER ID",
+            "blacklisted": false,
+            "warnings": {
+                "0": {
+                    "warning": "reason"
+                }
+            }
+        },
+        "123456133368119296": {
+            "name": "MirAei",
+            "id": 123456133368119296,
+            "blacklisted": false,
+            "warnings": {
+                "0": "mald",
+                "1": "cope"
+            }
+        },
+        "412213648916742145": {
+            "name": "Nao-nyan",
+            "id": 412213648916742145,
+            "blacklisted": false,
+            "warnings": {
+                "0": "Cat",
+                "1": "honk"
+            }
+        },
+        "701329437341384725": {
+            "name": "Splitzer0",
+            "id": 701329437341384725,
+            "blacklisted": false,
+            "warnings": {
+                "0": "your mums a dude"
+            }
+        }
+    }
+}

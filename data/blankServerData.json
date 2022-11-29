@@ -1,0 +1,35 @@
+{
+  "BOT-DATA-VERSION": "0.1.0",
+  "serverOwner": "SERVER OWNER NAME",
+  "serverOwnerID": "SERVER OWNER ID",
+  "guildName": "GUILD NAME",
+  "guildID": "GUILD ID",
+  "bdaysEnabled": false,
+  "bdayChannelID": null,
+  "bdayWishlistEnabled": false,
+  "welcome_channel": null,
+  "welcome_messages":[
+    
+  ],
+  "reactionRoles": {
+      "MESSAGE ID": {
+        "Max Roles": 0,
+        "rr": {
+          "EMOJI": "ROLE ID",
+          "EMOJI": "ROLE ID"
+        }
+      }
+  },
+  "users": {
+    "USER ID": {
+      "name":"USER NAME",
+      "id": "USER ID",
+      "blacklisted": false,
+      "warnings": {
+        "0": {
+          "warning": "reason"
+        }
+      }
+    }
+  }
+}

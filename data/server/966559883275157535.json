@@ -1,0 +1,72 @@
+{
+    "BOT-DATA-VERSION": "0.0.06",
+    "serverOwner": "Corvo Caligo",
+    "serverOwnerID": 340405162860609538,
+    "guildName": "Babies' First D&D Campaigns",
+    "guildID": 966559883275157535,
+    "bdaysEnabled": false,
+    "bdayChannelID": null,
+    "bdayWishlistEnabled": false,
+    "reactionRoles": {
+        "MESSAGE ID": {
+            "Max Roles": 0,
+            "rr": {
+                "EMOJI": "ROLE ID"
+            }
+        }
+    },
+    "users": {
+        "USER ID": {
+            "name": "USER NAME",
+            "id": "USER ID",
+            "blacklisted": false,
+            "warnings": {
+                "0": {
+                    "warning": "reason"
+                }
+            }
+        },
+        "701329437341384725": {
+            "name": "Splitzer0",
+            "id": 701329437341384725,
+            "blacklisted": false,
+            "warnings": {}
+        },
+        "606318643109691402": {
+            "name": "boredom",
+            "id": 606318643109691402,
+            "blacklisted": false,
+            "warnings": {
+                "0": "stop fucking the muffler!"
+            }
+        },
+        "538182480889380875": {
+            "name": "Cadaver",
+            "id": 538182480889380875,
+            "blacklisted": false,
+            "warnings": {
+                "0": "WELCOME TO THE CUM ZONE, ONLY CUM INSIDE ANIME GIRLS, QUIVERING CLIT, DOUBLE JOINTED PUSSY",
+                "1": "FRESH BALLS, ELEGANT EJACULATION, FIRST THE KISS, THEN THE CUM",
+                "2": "MY DICK IS IN LOVE WITH PAIN, CO-OP COCK TORTURE, STUFF MY COCK INTO A FURNACE, STITCH MY DICK SHUT"
+            }
+        },
+        "340405162860609538": {
+            "name": "Corvo Caligo",
+            "id": 340405162860609538,
+            "blacklisted": false,
+            "warnings": {}
+        },
+        "373277979779792898": {
+            "name": "r3tropi",
+            "id": 373277979779792898,
+            "blacklisted": false,
+            "warnings": {}
+        },
+        "500398861601472542": {
+            "name": "Betarro74",
+            "id": 500398861601472542,
+            "blacklisted": false,
+            "warnings": {}
+        }
+    }
+}

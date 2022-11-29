@@ -1,0 +1,41 @@
+{
+    "BOT-DATA-VERSION": "0.1.0",
+    "serverOwner": "Splitzer0",
+    "serverOwnerID": 701329437341384725,
+    "guildName": "Echo Com",
+    "guildID": 1045222676819624048,
+    "bdaysEnabled": false,
+    "bdayChannelID": null,
+    "bdayWishlistEnabled": false,
+    "welcome_channel": 1045240859299418192,
+    "welcome_messages": [
+        "your mums a dude! $USERMENTION",
+        "OI $USERMENTION HAS ENTERED THE REALM!!"
+    ],
+    "reactionRoles": {
+        "MESSAGE ID": {
+            "Max Roles": 0,
+            "rr": {
+                "EMOJI": "ROLE ID"
+            }
+        }
+    },
+    "users": {
+        "USER ID": {
+            "name": "USER NAME",
+            "id": "USER ID",
+            "blacklisted": false,
+            "warnings": {
+                "0": {
+                    "warning": "reason"
+                }
+            }
+        },
+        "701329437341384725": {
+            "name": "Splitzer0",
+            "id": 701329437341384725,
+            "blacklisted": false,
+            "warnings": {}
+        }
+    }
+}
